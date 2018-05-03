@@ -34,10 +34,13 @@ impl fmt::Display for Error {
         match *self {
             Io(ref err) => err.fmt(f),
             Yaml(ref err) => err.fmt(f),
-            NoHomeDir => write!(f, "\
+            NoHomeDir => write!(
+                f,
+                "\
 No configuration file was specified.
 We instead looked for a configuration file in your home directory.
-However, we could not find your home directory."),
+However, we could not find your home directory."
+            ),
         }
     }
 }

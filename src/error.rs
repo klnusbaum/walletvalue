@@ -22,11 +22,10 @@ impl From<config::Error> for Error {
 }
 
 impl From<fetcher::Error> for Error {
-     fn from(err: fetcher::Error) -> Error {
+    fn from(err: fetcher::Error) -> Error {
         Error::Fetch(err)
     }
 }
-   
 
 impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {

@@ -1,7 +1,6 @@
 use config;
 use config::WalletType;
 use error::Result;
-use std::io;
 
 pub use self::error::Error;
 
@@ -24,9 +23,11 @@ pub struct WalletAggregator {
 }
 
 impl WalletAggregator {
-    pub fn new(ripple_fetcher: RippleFetcher,
-               ethereum_fetcher: EtheriumFetcher,
-               generic_fetcher: GenericFetcher) -> WalletAggregator {
+    pub fn new(
+        ripple_fetcher: RippleFetcher,
+        ethereum_fetcher: EtheriumFetcher,
+        generic_fetcher: GenericFetcher,
+    ) -> WalletAggregator {
         WalletAggregator {
             ripple_fetcher,
             ethereum_fetcher,
@@ -34,11 +35,8 @@ impl WalletAggregator {
         }
     }
 
-    pub fn fetch_wallets(&self, wallets: Vec<config::Wallet>) -> Result<WalletResults> {
-        // let wallet_values: Vec<Result<WalletValue, &'static str>> = wallets.iter()
-        //     .map(|wallet| self.fetch_wallet(wallet))
-        //     .collect();
-        Ok(vec![])
+    pub fn fetch_wallets(&self, wallets: Vec<config::Wallet>) -> WalletResults {
+        wallets.iter().map(|wallet| self.fetch_wallet(wallet)).collect()
     }
 
     fn fetch_wallet(&self, wallet: &config::Wallet) -> Result<WalletValue> {
@@ -54,37 +52,34 @@ pub struct RippleFetcher {}
 
 impl RippleFetcher {
     pub fn new() -> RippleFetcher {
-        RippleFetcher{}
+        RippleFetcher {}
     }
 
     pub fn get_wallet_value(&self, wallet: &config::Wallet) -> Result<WalletValue> {
-        let ioErr: io::Error = io::Error::new(io::ErrorKind::Other, "not implemented");
-        Err(Error::Io(ioErr).into())
+        unimplemented!()
     }
 }
 
-pub struct EtheriumFetcher{}
+pub struct EtheriumFetcher {}
 
 impl EtheriumFetcher {
     pub fn new() -> EtheriumFetcher {
-        EtheriumFetcher{}
+        EtheriumFetcher {}
     }
 
     pub fn get_wallet_value(&self, wallet: &config::Wallet) -> Result<WalletValue> {
-        let ioErr: io::Error = io::Error::new(io::ErrorKind::Other, "not implemented");
-        Err(Error::Io(ioErr).into())
+        unimplemented!()
     }
 }
 
-pub struct GenericFetcher{}
+pub struct GenericFetcher {}
 
 impl GenericFetcher {
     pub fn new() -> GenericFetcher {
-        GenericFetcher{}
+        GenericFetcher {}
     }
 
     pub fn get_wallet_value(&self, wallet: &config::Wallet) -> Result<WalletValue> {
-        let ioErr: io::Error = io::Error::new(io::ErrorKind::Other, "not implemented");
-        Err(Error::Io(ioErr).into())
+        unimplemented!()
     }
 }

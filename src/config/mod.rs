@@ -16,7 +16,6 @@ pub enum WalletType {
     Generic(Symbol),
 }
 
-
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct Wallet {
     pub address: String,
@@ -25,29 +24,24 @@ pub struct Wallet {
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct Config {
-    pub wallets: Vec<Wallet>
+    pub wallets: Vec<Wallet>,
 }
 
 impl Config {
     pub fn new(mut args: env::Args) -> Result<Config> {
         args.next();
-        let config_file = match args.next() {
+        let config_file_name = match args.next() {
             Some(arg) => path::PathBuf::from(arg),
-            None => Config::default_config_path()?,
+            None => Config::default_config_file()?,
         };
 
-        let config_file = match File::open(config_file){
-           Ok(file) => file,
-           Err(ioerr) => return Err(Error::Io(ioerr).into()),
-        };
+        let config_file = File::open(config_file_name).map_err(Error::Io)?;
+        let config = serde_yaml::from_reader(config_file).map_err(Error::Yaml)?;
 
-        match serde_yaml::from_reader(config_file) {
-            Ok(config) => Ok(config),
-            Err(yamlerr) => Err(Error::Yaml(yamlerr).into()),
-        }
+        Ok(config)
     }
 
-    fn default_config_path() -> Result<path::PathBuf> {
+    fn default_config_file() -> Result<path::PathBuf> {
         let mut home_dir = match env::home_dir() {
             Some(path_buf) => path_buf,
             None => return Err(Error::NoHomeDir.into()),
